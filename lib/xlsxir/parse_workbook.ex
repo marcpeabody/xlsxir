@@ -37,8 +37,11 @@ defmodule Xlsxir.ParseWorkbook do
   end
 
   def sax_event_handler(:endDocument, %__MODULE__{tid: tid} = state) do
-    Enum.map(state.sheets, fn %{sheet_id: sheet_id, name: name} ->
-      :ets.insert(tid, {sheet_id, name})
+    state.sheets
+    |> Enum.reverse()
+    |> Enum.with_index(1)
+    |> Enum.each(fn {%{name: name}, index} ->
+      :ets.insert(tid, {index, name})
     end)
 
     state
