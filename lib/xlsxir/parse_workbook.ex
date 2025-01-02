@@ -12,10 +12,10 @@ defmodule Xlsxir.ParseWorkbook do
     %__MODULE__{tid: GenServer.call(Xlsxir.StateManager, :new_table)}
   end
 
-  def sax_event_handler({:startElement, _, 'sheet', _, xml_attrs}, state) do
+  def sax_event_handler({:startElement, _, ~c"sheet", _, xml_attrs}, state) do
     sheet_name =
       Enum.find_value(xml_attrs, fn
-        {:attribute, 'name', _, _, name} -> to_string(name)
+        {:attribute, ~c"name", _, _, name} -> to_string(name)
         _ -> nil
       end)
 
